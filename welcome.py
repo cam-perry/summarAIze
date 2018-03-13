@@ -13,7 +13,10 @@
 # limitations under the License.
 
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import requests
+import json
+
 
 app = Flask(__name__)
 
@@ -21,9 +24,19 @@ app = Flask(__name__)
 def Welcome():
     return app.send_static_file('index.html')
 
-@app.route('/myapp')
-def WelcomeToMyapp():
-    return 'Welcome again to my app running on Bluemix!'
+@app.route('/api/comments')
+def GetCommentsForVideo():
+    req_url = 'https://www.googleapis.com/youtube/v3/commentThreads?maxResults=100&part=snippet&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&videoId='
+    req_url += request.args.get('videoId')
+    res = requests.get(req_url)
+    result_data = res.json()['items']
+
+    # keep looping through all comment pages to get all top level comments
+    while 'nextPageToken' in res.json():
+        res = requests.get(req_url + '&pageToken=' + res.json()['nextPageToken'])
+        for item in res.json()['items']:
+            result_data.append(item)
+    return jsonify(results=result_data)
 
 @app.route('/api/people')
 def GetPeople():
