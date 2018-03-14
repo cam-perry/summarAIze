@@ -1,7 +1,28 @@
 /*******************/
-/*URL Input Field*/
+/*URL Entry*/
 /*******************/
 
+
+/*******************/
+/*Comments Table*/
+/*******************/
+table {
+    width:80%;
+    align-content: center;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+table, th, td {
+
+    border: 1px solid black;
+} 
+
+
+table th, table td{
+    padding: 15px 25px;
+    text-align: center;
+}
 
 /*******************/
 /*Top Entities List*/
