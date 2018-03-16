@@ -15,15 +15,33 @@
 import os
 from flask import Flask, jsonify, request
 import requests
+import sys
+import json
+from watson_developer_cloud import DiscoveryV1
 
 from youtube import getTopLevelComments
 from youtube import getReplies
+
+discovery = DiscoveryV1(
+  username="333e8f48-6029-4375-a553-4db2cc467f46",
+  password="ykJmpPHlGMnW",
+  version="2017-11-07"
+)
+
+#with open((os.path.join(os.getcwd(), '{path_element}', '{filename}' as fileinfo:
+#  add_doc = discovery.add_document('{environment_id}', '{collection_id}', file_info=fileinfo)
+#print(json.dumps(add_doc, indent=2))
 
 app = Flask(__name__)
 
 @app.route('/')
 def Welcome():
     return app.send_static_file('index.html')
+
+@app.route('/Analyze')
+def Analyze():
+    print
+    return
 
 ## To fetch all comments for a given YouTube video
 ## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
