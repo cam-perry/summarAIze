@@ -25,23 +25,78 @@ from youtube import getReplies
 discovery = DiscoveryV1(
   username="333e8f48-6029-4375-a553-4db2cc467f46",
   password="ykJmpPHlGMnW",
-  version="2017-11-07"
+  version="2018-03-07"
 )
 
-#with open((os.path.join(os.getcwd(), '{path_element}', '{filename}' as fileinfo:
-#  add_doc = discovery.add_document('{environment_id}', '{collection_id}', file_info=fileinfo)
-#print(json.dumps(add_doc, indent=2))
+resultsJSON = {             #example for testing
+  "results": [
+    {
+      "author_channel": "http://www.youtube.com/channel/UCyNTDMdk-plBFVwm6unKcQw",
+      "author_name": "KnightCrown",
+      "id": "UgxlMYi_wXGEaU1PIB14AaABAg",
+      "replies": 0,
+      "text": "Shame. The voice acting was absolutely stellar and definitely adds alot to the experience",
+      "type": "top-level"
+    },
+    {
+      "author_channel": "http://www.youtube.com/channel/UC-PQf-3OwTRXoJMo684bIdg",
+      "author_name": "Kristina Thuduwage",
+      "id": "Ugz-KOPvxmHVtZdWxRR4AaABAg",
+      "replies": 2,
+      "text": "so what was the name of the song from the game?",
+      "type": "top-level"
+    },
+    {
+      "author_channel": "http://www.youtube.com/channel/UCs-NmivxOfqiGkltRI6pygA",
+      "author_name": "\u10d2\u10d8\u10dd\u10e0\u10d2\u10d8",
+      "id": "UgwB9hbiPBGWJnvjqy94AaABAg",
+      "replies": 0,
+      "text": "actually there is unofficial version of it, with ps3 sprites, voices and etc, it's still work in progress. The best part is, it's legal because the author put it through a password wall and you need ps3 version and pc version to get it. look up \"Umineko Project\". I'm still waiting for them to finish the rest before playing.",
+      "type": "top-level"
+    }
+  ]
+}
+videoId = '23VP_mwwvxw'         # example for testing
+
+def uploadToDiscovery():
+    videoId = '23VP_mwwvxw'             # example for testing
+    with app.app_context():
+        environments = discovery.list_environments()
+        # Gets environment ID
+        environment_id = environments["environments"][1]["environment_id"]
+        configs = discovery.list_configurations(environment_id)
+        config_id = configs["configurations"][0]["configuration_id"]
+
+        # Delete existing collection
+        collections = discovery.list_collections(environment_id)
+        collection_id=collections["collections"][1]["collection_id"]
+        delete_collection = discovery.delete_collection(environment_id, collection_id)
+
+        
+        # Create new collection
+        new_collection = discovery.create_collection(environment_id=environment_id,name=videoId)
+        collection_id=new_collection["collection_id"]
+
+        # Add documents
+        # Need to loop and add all docs in the videoId folder!!
+        with open(os.getcwd() + "/data/" + videoId + "/0.html") as fileinfo:
+            add_doc = discovery.add_document(environment_id, collection_id, file=fileinfo)
+            print(json.dumps(add_doc, indent=2))
+
+# Creates .html files, one per comment, in the data/videoId folder
+def createHTMLFiles(videoId, resultsJSON):
+    for i in range(0,len(resultsJSON["results"])):
+        if not os.path.exists("data/"+videoId):            #create a new directory with the video id if it doesn't already exist
+            os.makedirs("data/"+videoId)
+        Html_file= open("data/"+videoId+"/"+str(i)+".html","w")
+        Html_file.write(str(json.dumps(resultsJSON["results"][i])))
+        Html_file.close
 
 app = Flask(__name__)
 
 @app.route('/')
 def Welcome():
     return app.send_static_file('index.html')
-
-@app.route('/Analyze')
-def Analyze():
-    print
-    return
 
 ## To fetch all comments for a given YouTube video
 ## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
@@ -57,8 +112,13 @@ def GetCommentsForVideo():
 
     # flatten out replies from a list of lists to a single list
     replies_flat = [reply for reply_list in replies_tall for reply in reply_list]
+
+    # creates HTML files in data folder to be uploaded into Watson Discovery
+    resultsJSON = jsonify(results=(comments + replies_flat))
+    createHTMLFiles(videoId, resultsJSON)
+
     # return all comments and replies
-    return jsonify(results=(comments + replies_flat))
+    return resultsJSON
 
 @app.route('/api/people')
 def GetPeople():
