@@ -15,8 +15,9 @@
 import os
 from flask import Flask, jsonify, request
 import requests
-import json
 
+from youtube import getTopLevelComments
+from youtube import getReplies
 
 app = Flask(__name__)
 
@@ -24,19 +25,22 @@ app = Flask(__name__)
 def Welcome():
     return app.send_static_file('index.html')
 
+## To fetch all comments for a given YouTube video
+## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
 @app.route('/api/comments')
 def GetCommentsForVideo():
-    req_url = 'https://www.googleapis.com/youtube/v3/commentThreads?maxResults=100&part=snippet&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&videoId='
-    req_url += request.args.get('videoId')
-    res = requests.get(req_url)
-    result_data = res.json()['items']
+    # parse video ID from the request query string
+    videoId = request.args.get('videoId')
+    # fetch the top level comments
+    comments = getTopLevelComments(videoId)
 
-    # keep looping through all comment pages to get all top level comments
-    while 'nextPageToken' in res.json():
-        res = requests.get(req_url + '&pageToken=' + res.json()['nextPageToken'])
-        for item in res.json()['items']:
-            result_data.append(item)
-    return jsonify(results=result_data)
+    # use top level comments to get replies
+    replies_tall = [getReplies(comment['id']) for comment in comments if comment['replies'] > 0]
+
+    # flatten out replies from a list of lists to a single list
+    replies_flat = [reply for reply_list in replies_tall for reply in reply_list]
+    # return all comments and replies
+    return jsonify(results=(comments + replies_flat))
 
 @app.route('/api/people')
 def GetPeople():
