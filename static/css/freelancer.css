@@ -53,7 +53,7 @@ hr.star-dark:after {
 }
 
 section {
-  padding: 6rem 0;
+  padding: 0rem;
 }
 
 section h2 {
@@ -378,3 +378,4 @@ a:focus, a:hover, a:active {
   background-color: #1a252f;
   border-color: #1a252f;
 }
+
