@@ -58,9 +58,10 @@ resultsJSON = {             #example for testing
 }
 videoId = '23VP_mwwvxw'         # example for testing
 
-def uploadToDiscovery():
-    videoId = '23VP_mwwvxw'             # example for testing
+#Deletes existing collection and creates new collection for current video being analyzed
+def setUpCollection():
     with app.app_context():
+        videoId = '23VP_mwwvxw'
         environments = discovery.list_environments()
         # Gets environment ID
         environment_id = environments["environments"][1]["environment_id"]
@@ -72,17 +73,22 @@ def uploadToDiscovery():
         collection_id=collections["collections"][1]["collection_id"]
         delete_collection = discovery.delete_collection(environment_id, collection_id)
 
-        
         # Create new collection
         new_collection = discovery.create_collection(environment_id=environment_id,name=videoId)
         collection_id=new_collection["collection_id"]
 
-        # Add documents
-        # Need to loop and add all docs in the videoId folder!!
-        with open(os.getcwd() + "/data/" + videoId + "/0.html") as fileinfo:
-            add_doc = discovery.add_document(environment_id, collection_id, file=fileinfo)
-            print(json.dumps(add_doc, indent=2))
+        addToCollection(environment_id, collection_id, videoId)
 
+#Adds documents in videoId folder to collection and deletes them
+def addToCollection(environment_id, collection_id, videoId):
+    path = os.getcwd()+"/data/"+videoId+"/"
+    # Looping through files in videoId folder and uploading all of them and then deleting all of them
+    for filename in os.listdir(path):
+        with open(path + filename) as fileinfo:
+            add_doc = discovery.add_document(environment_id, collection_id, file=fileinfo)
+    for filename in os.listdir(path):
+        remove(path + filename)
+        
 # Creates .html files, one per comment, in the data/videoId folder
 def createHTMLFiles(videoId, resultsJSON):
     for i in range(0,len(resultsJSON["results"])):
