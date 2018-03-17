@@ -13,7 +13,11 @@
 # limitations under the License.
 
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import requests
+
+from youtube import getTopLevelComments
+from youtube import getReplies
 
 app = Flask(__name__)
 
@@ -21,9 +25,22 @@ app = Flask(__name__)
 def Welcome():
     return app.send_static_file('index.html')
 
-@app.route('/myapp')
-def WelcomeToMyapp():
-    return 'Welcome again to my app running on Bluemix!'
+## To fetch all comments for a given YouTube video
+## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
+@app.route('/api/comments')
+def GetCommentsForVideo():
+    # parse video ID from the request query string
+    videoId = request.args.get('videoId')
+    # fetch the top level comments
+    comments = getTopLevelComments(videoId)
+
+    # use top level comments to get replies
+    replies_tall = [getReplies(comment['id']) for comment in comments if comment['replies'] > 0]
+
+    # flatten out replies from a list of lists to a single list
+    replies_flat = [reply for reply_list in replies_tall for reply in reply_list]
+    # return all comments and replies
+    return jsonify(results=(comments + replies_flat))
 
 @app.route('/api/people')
 def GetPeople():
