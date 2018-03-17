@@ -94,3 +94,31 @@ table {
         float:none;
     }
   }
+
+  /*Barchart CSS*/
+
+  .chart--container {
+    height: 50vh;
+    width: 80%;
+    margin: auto;
+  }
+  
+  .bar {
+    fill: #EB3324;
+  }
+  
+  text {
+    fill: #EB3324;
+    font-family: courier;
+    letter-spacing: -1px;
+  }
+  
+  .domain, .tick line {
+    stroke: #EB3324;
+    stroke-width: 1px;
+  }
+  
+  .label {
+    text-transform: capitalize;
+  }
+  
