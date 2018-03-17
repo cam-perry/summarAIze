@@ -13,10 +13,13 @@
 # limitations under the License.
 
 import requests
+import threading
+import time
+from watson import uploadDocsToWatson
 
 ## recursive function to collect all top level comments on a video
 ## call with the video's ID as videoId
-def getTopLevelComments(videoId, nextPageToken=''):
+def getTopLevelComments(videoId, environment_id, collection_id, nextPageToken=''):
     base_url = 'https://www.googleapis.com/youtube/v3/commentThreads?maxResults=100&part=snippet&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&videoId='
     base_url += videoId
     query = base_url if nextPageToken == '' else base_url + '&pageToken=' + nextPageToken
@@ -26,31 +29,41 @@ def getTopLevelComments(videoId, nextPageToken=''):
                        'text': comment['snippet']['topLevelComment']['snippet']['textOriginal'],
                        'author_name': comment['snippet']['topLevelComment']['snippet']['authorDisplayName'],
                        'author_channel': comment['snippet']['topLevelComment']['snippet']['authorChannelUrl'],
-                       'id': comment['id'],
+                       'Cid': comment['id'],
                        'replies': comment['snippet']['totalReplyCount']
                        } for comment in res.json()['items']]
 
+    t = threading.Thread(target=uploadDocsToWatson, args=(clean_comments, environment_id, collection_id))
+    t.start()
+
+    print('threaded')
+
     if 'nextPageToken' in res.json():
-        return clean_comments + getTopLevelComments(videoId, res.json()['nextPageToken'])
+        return clean_comments + getTopLevelComments(videoId, environment_id, collection_id, res.json()['nextPageToken'])
     else:
         return clean_comments
 
 ## recursive function to collect all replies to a top level comment
 ## call with the top level comment's ID as parentId
-def getReplies(parentId, nextPageToken=''):
+def getReplies(parentId, videoId, environment_id, collection_id, nextPageToken=''):
     base_url = 'https://www.googleapis.com/youtube/v3/comments?part=snippet&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&textFormat=plainText&maxResults=100&parentId='
     base_url += parentId
     query = base_url if nextPageToken == '' else base_url + '&pageToken=' + nextPageToken
     res = requests.get(query)
-    print(res.json()['items'])
+
     clean_comments = [{'type': 'reply',
                        'text': comment['snippet']['textOriginal'],
                        'author_name': comment['snippet']['authorDisplayName'],
                        'author_channel': comment['snippet']['authorChannelUrl'],
                        'parentId': comment['snippet']['parentId'],
-                       'replyId': comment['id']
+                       'Cid': comment['id']
                        } for comment in res.json()['items']]
+
+    ## create new thread to handle publishing results to Watson
+    t = threading.Thread(target=uploadDocsToWatson, args=(clean_comments, environment_id, collection_id))
+    t.start()
+
     if 'nextPageToken' in res.json():
-        return clean_comments + getReplies(parentId, res.json()['nextPageToken'])
+        return clean_comments + getReplies(parentId, videoId, environment_id, collection_id, res.json()['nextPageToken'])
     else:
         return clean_comments
