@@ -1,5 +1,5 @@
 .url_form {
-    margin-top: 50px;
+    margin-top: 190px;
 }
 @media screen and (max-width:768px){
     #submit-btn {
@@ -8,16 +8,28 @@
     }
 }
 header.Our_Header {
-    width 100%;
+    width: 100%;
     margin-top: 120px;
 }
 
+h1 {
+    text-align: center;
+}
+
+#URL_Lines {
+    justify-content: center;
+    align-items: center;
+}
+
+#Bottom_padding {
+    margin-bottom: 50px;
+}
 #Top_Entities {
-    margin: auto;
+    margin-top: 30px;
 }
 
 table {
-    width:80%;
+    width:100%;
     align-content: center;
     border-collapse: collapse;
     margin: 0;
