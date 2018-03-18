@@ -5,8 +5,8 @@ import csv
 from watson_developer_cloud import DiscoveryV1
 
 discovery = DiscoveryV1(
-    username="333e8f48-6029-4375-a553-4db2cc467f46",
-    password="ykJmpPHlGMnW",
+    username="45063df0-4434-4245-a465-752ac7d12514",
+    password="UXbZKDFdIyWh",
     version="2018-03-07"
 )
 
