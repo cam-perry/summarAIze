@@ -1,5 +1,7 @@
 import os
 import json
+import csv
+
 from watson_developer_cloud import DiscoveryV1
 
 discovery = DiscoveryV1(
@@ -20,8 +22,11 @@ def setUpCollection(videoId, app):
 
         # Delete existing collection
         collections = discovery.list_collections(environment_id)
-        collection_id = collections["collections"][1]["collection_id"]
-        delete_collection = discovery.delete_collection(environment_id, collection_id)
+        try:
+            collection_id = collections["collections"][1]["collection_id"]
+            delete_collection = discovery.delete_collection(environment_id, collection_id)
+        except Exception:
+            print('Only had one collection')
 
         # Create new collection
         new_collection = discovery.create_collection(environment_id=environment_id, name=videoId)
@@ -35,9 +40,8 @@ def uploadDocsToWatson(comments, environment_id, collection_id):
         # add the file to discovery
         while True:
             try:
-                print(comment)
                 discovery.add_document(environment_id, collection_id, file=json.dumps(comment),
-                                                file_content_type='application/json', filename=comment['C   id'])
+                                                file_content_type='application/json', filename=comment['Cid'])
                 break
             except Exception:
-                complete = False
+                print('Overflow on Watson write')
