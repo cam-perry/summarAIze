@@ -14,10 +14,12 @@
 
 import os
 from flask import Flask, jsonify, request
-import requests
 
 from youtube import getTopLevelComments
 from youtube import getReplies
+
+from watson import setUpCollection
+
 
 app = Flask(__name__)
 
@@ -31,16 +33,18 @@ def Welcome():
 def GetCommentsForVideo():
     # parse video ID from the request query string
     videoId = request.args.get('videoId')
+
+    # remove existing the collection on Watson, and create a new one with this videoId
+    (environment_id, collection_id) = setUpCollection(videoId, app)
+
     # fetch the top level comments
-    comments = getTopLevelComments(videoId)
+    comments = getTopLevelComments(videoId, environment_id, collection_id)
 
     # use top level comments to get replies
-    replies_tall = [getReplies(comment['id']) for comment in comments if comment['replies'] > 0]
+    replies_tall = [getReplies(comment['Cid'], videoId, environment_id, collection_id) for comment in comments if comment['replies'] > 0]
 
-    # flatten out replies from a list of lists to a single list
-    replies_flat = [reply for reply_list in replies_tall for reply in reply_list]
     # return all comments and replies
-    return jsonify(results=(comments + replies_flat))
+    return jsonify(result='success')
 
 @app.route('/api/people')
 def GetPeople():
