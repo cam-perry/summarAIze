@@ -49,5 +49,6 @@ def uploadDocsToWatson(comments, environment_id, collection_id):
 def checkUploadCount(environment_id, collection_id):
     # Gets collection info
     collection = discovery.get_collection(environment_id=environment_id, collection_id=collection_id)
+    print(collection['document_counts']['available'])
     # return the number of available documents
-    return collection.document_counts.available
+    return collection['document_counts']['available']

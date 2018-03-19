@@ -5,20 +5,30 @@ $('#submit-btn').on('click', () => {
 
     if (url_split.length >= 2 && url_split[1].length === 11) {
       // valid videoId submitted
+
+      $('#alert-box').html(
+        '<div class="alert alert-secondary">' +
+        'Attempting to find your YouTube video.' +
+        '</div>'
+      );
+
+
       const videoId = url_split[1];
       console.log('tested')
       $.ajax({
          url: '/api/comments?videoId=' + videoId,
          method: 'GET',
-         beforeSend: function() { $('#alert-box').html('') },
+         beforeSend: function() {
+           $('#alert-box').html('');
+           $('#YTurl').prop('disabled', true);
+         },
          success: function(response) {
            $('#alert-box').html(
              '<div class="alert alert-success">' +
              '<strong>Success!</strong> Please wait while we download and analyze your comments.' +
              '</div>'
            );
-//           const data = $.parseJSON(response);
-//           waitForWatsonUploads(data.results.environment_id, data.results.collection_id);
+           waitForWatsonUploads(response.results.environment_id, response.results.collection_id, response.results.total_comments);
          },
          error: function() {
            $('#alert-box').html(
@@ -40,31 +50,43 @@ $('#submit-btn').on('click', () => {
     return false;
 });
 
-//  function waitForWatsonUploads(env_id, col_id) {
-//
-//    // wait 10 seconds each check
-//    sleep(10000)
-//    let count = -1;
-//    let new_count = 0;
-//
-//    while ( count !== new_count ) {
-//      $.ajax({
-//        url: '/api/upload_status?environment_id=' + env_id + '&collection_id=' + col_id,
-//        method: 'GET',
-//        beforeSend: function() { },
-//        success: function(response) {
-//          console.log(response);
-//        },
-//      })
-//      new_count = -1;
-//    }
-//
-//
-// function sleep(milliseconds) {
-//   var start = new Date().getTime();
-//   for (var i = 0; i < 1e7; i++) {
-//     if ((new Date().getTime() - start) > milliseconds){
-//       break;
-//     }
-//   }
-// }
+function waitForWatsonUploads(env_id, col_id, total_comments, last_count=-1) {
+
+   console.log('waiting for watson')
+   let new_count;
+   let is_done = false;
+   $.ajax({
+     url: '/api/upload_status?environment_id=' + env_id + '&collection_id=' + col_id,
+     method: 'GET',
+     beforeSend: function() { },
+     success: function(response) {
+       $('#progress-box').html('')
+       $('#progress-box').html(
+         '<div class="progress">' +
+           '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' + response.results + '" aria-valuemin="0" aria-valuemax="'+ total_comments +'" style="width: '+ Math.round(response.results*100 / total_comments)  +'%"></div>' +
+         '</div>'
+       )
+       if (last_count === response.results)
+          is_done = true;
+
+       else
+          new_count = response.results
+      }
+    }).then( () => {
+        if (is_done) {
+          // IT IS DONE
+          console.log('its done')
+          $('#progress-box').html('')
+          $('#progress-box').html(
+            '<div class="progress">' +
+              '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' + response.results + '" aria-valuemin="0" aria-valuemax="'+ total_comments +'" style="width: '+ Math.round(response.results*100 / total_comments)  +'%"></div>' +
+            '</div>'
+          )
+        } else {
+          setTimeout( function() {
+            waitForWatsonUploads(env_id, col_id, total_comments, new_count)
+          }, 10000)
+        }
+    })
+
+}

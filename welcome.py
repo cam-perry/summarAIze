@@ -27,6 +27,10 @@ app = Flask(__name__)
 def Welcome():
     return app.send_static_file('index.html')
 
+## To fetch summary data about a YouTube video on initial submit
+
+
+
 ## To fetch all comments for a given YouTube video
 ## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
 @app.route('/api/comments')
@@ -47,6 +51,7 @@ def GetCommentsForVideo():
     return_val = {
         'environment_id': environment_id,
         'collection_id': collection_id,
+        'total_comments': len(comments) + sum([len(replies) for replies in replies_tall]),
         'status': 'success'
     }
 
