@@ -125,11 +125,11 @@ Chart = function() {
                 .append("text")
                 .attr("class", "label")
                 .attr("y", 20)
-                .attr("x", 950 - margin.top)
+                .attr("x", "93%")
                 .attr("dy", "1em")
                 .style("text-anchor", "end")
                 .text("sentiment");
-
+console.log("margin.top:"+margin.top)
             //bars container
             bars = barGroup.selectAll(".bar");
             //bars
