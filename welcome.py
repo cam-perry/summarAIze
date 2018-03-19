@@ -17,6 +17,7 @@ from flask import Flask, jsonify, request
 
 from youtube import getTopLevelComments
 from youtube import getReplies
+from youtube import getVideoData
 
 from watson import setUpCollection
 from watson import checkUploadCount
@@ -28,8 +29,10 @@ def Welcome():
     return app.send_static_file('index.html')
 
 ## To fetch summary data about a YouTube video on initial submit
-
-
+@app.route('/api/video')
+def GetVideoSummary():
+    data = getVideoData(request.args.get('videoId'))
+    return jsonify(results=data)
 
 ## To fetch all comments for a given YouTube video
 ## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
@@ -51,7 +54,6 @@ def GetCommentsForVideo():
     return_val = {
         'environment_id': environment_id,
         'collection_id': collection_id,
-        'total_comments': len(comments) + sum([len(replies) for replies in replies_tall]),
         'status': 'success'
     }
 

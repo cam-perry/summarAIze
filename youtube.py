@@ -19,7 +19,7 @@ from watson import uploadDocsToWatson
 
 
 def getVideoData(videoId):
-    base_url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&videoId='
+    base_url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&id='
     res = requests.get(base_url + videoId)
     return res.json()
 
