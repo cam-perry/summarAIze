@@ -45,3 +45,11 @@ def uploadDocsToWatson(comments, environment_id, collection_id):
                 break
             except Exception:
                 print('Overflow on Watson write')
+
+def checkUploadCount(environment_id, collection_id):
+    # Gets collection info
+    collection = discovery.get_collection(environment_id=environment_id, collection_id=collection_id)
+    print(collection['document_counts']['available'])
+    # return the number of available documents
+
+    return collection['document_counts']

@@ -17,6 +17,13 @@ import threading
 import time
 from watson import uploadDocsToWatson
 
+
+def getVideoData(videoId):
+    base_url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&id='
+    res = requests.get(base_url + videoId)
+    return res.json()
+
+
 ## recursive function to collect all top level comments on a video
 ## call with the video's ID as videoId
 def getTopLevelComments(videoId, environment_id, collection_id, nextPageToken=''):

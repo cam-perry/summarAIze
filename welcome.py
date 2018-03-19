@@ -17,15 +17,22 @@ from flask import Flask, jsonify, request
 
 from youtube import getTopLevelComments
 from youtube import getReplies
+from youtube import getVideoData
 
 from watson import setUpCollection
-
+from watson import checkUploadCount
 
 app = Flask(__name__)
 
 @app.route('/')
 def Welcome():
     return app.send_static_file('index.html')
+
+## To fetch summary data about a YouTube video on initial submit
+@app.route('/api/video')
+def GetVideoSummary():
+    data = getVideoData(request.args.get('videoId'))
+    return jsonify(results=data)
 
 ## To fetch all comments for a given YouTube video
 ## GET /api/comments?videoId=<ENTER_VIDEO_ID_HERE>
@@ -44,15 +51,23 @@ def GetCommentsForVideo():
     replies_tall = [getReplies(comment['Cid'], videoId, environment_id, collection_id) for comment in comments if comment['replies'] > 0]
 
     # return all comments and replies
-    return jsonify(result='success')
+    return_val = {
+        'environment_id': environment_id,
+        'collection_id': collection_id,
+        'status': 'success'
+    }
 
-@app.route('/api/people')
-def GetPeople():
-    list = [
-        {'name': 'John', 'age': 28},
-        {'name': 'Bill', 'val': 26}
-    ]
-    return jsonify(results=list)
+    return jsonify(results=return_val)
+
+
+
+@app.route('/api/upload_status')
+def checkUploadStatus():
+    # get and return the current document count uploaded
+    environment_id = request.args.get('environment_id')
+    collection_id = request.args.get('collection_id')
+    results = checkUploadCount(environment_id, collection_id)
+    return jsonify(results=results)
 
 @app.route('/api/people/<name>')
 def SayHello(name):
