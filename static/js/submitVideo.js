@@ -70,11 +70,10 @@ $('#submit-btn').on('click', () => {
 });
 
 
-// this function runs a loop until there are at least 95% of the comments uploaded (room for error)
+// this function runs a loop until the comments are all uploaded (can track failures and processing)
 // responsible for updating progress bar as it goes, and triggering analytics in backend when complete
 function waitForWatsonUploads(env_id, col_id, total_comments) {
 
-   const COMPLETION_LEVEL_TO_QUIT = 0.95;
 
    let new_count;
    let is_done = false;
@@ -89,13 +88,14 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
        $('#progress-box').html('')
        $('#progress-box').html(
          '<div class="progress">' +
-           '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' + response.results + '" aria-valuemin="0" aria-valuemax="'+ total_comments +'" style="width: '+ Math.round(response.results*100 / total_comments)  +'%"></div>' +
+           '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' + response.results.available + '" aria-valuemin="0" aria-valuemax="'+ total_comments +'" style="width: '+ Math.round(response.results*100 / total_comments)  +'%"></div>' +
          '</div>'
        )
-       if (response.results >= total_comments * COMPLETION_LEVEL_TO_QUIT)
+
+       if (response.results.available + response.results.failed === total_comments)
           is_done = true;
        else
-          new_count = response.results
+          new_count = response.results.available
       }
     }).then( () => {
         if (is_done) {

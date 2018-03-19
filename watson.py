@@ -51,4 +51,5 @@ def checkUploadCount(environment_id, collection_id):
     collection = discovery.get_collection(environment_id=environment_id, collection_id=collection_id)
     print(collection['document_counts']['available'])
     # return the number of available documents
-    return collection['document_counts']['available']
+
+    return collection['document_counts']

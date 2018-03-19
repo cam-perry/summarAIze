@@ -66,8 +66,8 @@ def checkUploadStatus():
     # get and return the current document count uploaded
     environment_id = request.args.get('environment_id')
     collection_id = request.args.get('collection_id')
-    count = checkUploadCount(environment_id, collection_id)
-    return jsonify(results=count)
+    results = checkUploadCount(environment_id, collection_id)
+    return jsonify(results=results)
 
 @app.route('/api/people/<name>')
 def SayHello(name):
