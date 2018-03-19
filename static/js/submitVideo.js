@@ -78,8 +78,6 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
    let new_count;
    let is_done = false;
 
-   console.log('new_run')
-
    $.ajax({
      url: '/api/upload_status?environment_id=' + env_id + '&collection_id=' + col_id,
      method: 'GET',
@@ -88,11 +86,11 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
        $('#progress-box').html('')
        $('#progress-box').html(
          '<div class="progress">' +
-           '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' + response.results.available + '" aria-valuemin="0" aria-valuemax="'+ total_comments +'" style="width: '+ Math.round(response.results*100 / total_comments)  +'%"></div>' +
+           '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' + response.results.available + '" aria-valuemin="0" aria-valuemax="'+ total_comments +'" style="width: '+ Math.round(response.results.available*100 / total_comments)  +'%"></div>' +
          '</div>'
        )
-
-       if (response.results.available + response.results.failed === total_comments)
+       console.log(response.results)
+       if (response.results.processing === 0)
           is_done = true;
        else
           new_count = response.results.available
@@ -100,7 +98,6 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
     }).then( () => {
         if (is_done) {
           // complete the function if total response count is reached
-          console.log('is_done')
           $('#alert-box').html('')
           $('#alert-box').html(
             '<div class="alert alert-success">' +
@@ -108,11 +105,7 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
             '</div>'
           );
           $('#progress-box').html('')
-          $('#progress-box').html(
-            '<div class="progress">' +
-              '<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="1" style="width: 100%"></div>' +
-            '</div>'
-          )
+
           // AJAX CALL TO KATIE's BACKEND FUNCTIONS GO HERE
 
         } else {
