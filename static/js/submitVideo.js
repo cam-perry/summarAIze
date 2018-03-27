@@ -97,6 +97,7 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
       }
     }).then( () => {
         if (is_done) {
+            console.log('this happened');
           // complete the function if total response count is reached
           $('#alert-box').html('')
           $('#alert-box').html(
@@ -105,8 +106,16 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
             '</div>'
           );
           $('#progress-box').html('')
-
-          // AJAX CALL TO KATIE's BACKEND FUNCTIONS GO HERE
+          $.ajax({
+     url: '/api/analyze',
+     method: 'GET',
+     beforeSend: function() { },
+     success: function(response) {
+       console.log(response.results);
+    },
+              error: function(error){
+          }
+    })
 
         } else {
           // if not done, keep checking every 2 seconds
