@@ -106,7 +106,8 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
             '</div>'
           );
           $('#progress-box').html('')
-          $.ajax({
+          window.history.push("/analyze.html")
+          /*$.ajax({
      url: '/api/analyze',
      method: 'GET',
      beforeSend: function() { },
@@ -115,7 +116,7 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
     },
               error: function(error){
           }
-    })
+    })*/
 
         } else {
           // if not done, keep checking every 2 seconds
