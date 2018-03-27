@@ -21,12 +21,72 @@ from youtube import getVideoData
 
 from watson import setUpCollection
 from watson import checkUploadCount
+from watson_developer_cloud import DiscoveryV1
+
+discovery = DiscoveryV1(
+    username="45063df0-4434-4245-a465-752ac7d12514",
+    password="UXbZKDFdIyWh",
+    version="2018-03-07"
+)
 
 app = Flask(__name__)
 
 @app.route('/')
 def Welcome():
     return app.send_static_file('index.html')
+
+@app.route('/api/analyze')
+def Analyze():
+    file = open('id.txt','r')
+    e_id = file.readline().strip()
+    c_id = file.readline().strip()
+    file.close()
+    my_query = discovery.query(environment_id=e_id, collection_id=c_id, query='', count=9999)
+    print(my_query)
+        # Finds entities and how many times they are mentioned
+    entitiesDict = {}
+    sentiments = {'-1.0to-0.75':0,'-0.75to-0.50':0,'-0.50to-0.25':0,'-0.25to0.00':0,'0.00to0.25':0,'0.25to0.50':0,'0.50to0.75':0, '0.75to1.00':0}
+    totalComments = 0
+    #Loop and fill dictionaries
+    for comment in my_query["results"]:
+        totalComments += 1
+        sentiment = comment["enriched_text"]["sentiment"]["document"]["score"]
+        if sentiment >= -1 and sentiment < -0.75:
+            sentiments['-1.0to-0.75'] += 1
+        elif sentiment >= -0.75 and sentiment < -0.5:
+            sentiments['-0.75to-0.50'] += 1
+        elif sentiment >= -0.5 and sentiment < -0.25:
+            sentiments['-0.50to-0.25'] += 1
+        elif sentiment >= -0.25 and sentiment < 0:
+            sentiments['-0.25to0.00'] += 1
+        elif sentiment >= 0 and sentiment < 0.25:
+            sentiments['0.00to0.25'] += 1
+        elif sentiment >= 0.25 and sentiment < 0.5:
+            sentiments['0.25to0.50'] += 1            
+        elif sentiment >= 0.5 and sentiment < 0.75:
+            sentiments['0.50to0.75'] += 1
+        elif sentiment >= 0.75 and sentiment < 1:
+            sentiments['0.75to1.00'] += 1
+        entities = comment["enriched_text"]["entities"]
+        if entities != []:
+            for entity in entities:
+                entityName = entity["text"]
+                if entityName not in entitiesDict:
+                    entitiesDict[entityName] = {'score':[comment["enriched_text"]["sentiment"]["document"]["score"]],'count':1}
+                else:
+                    entitiesDict[entityName]["score"].append(comment["enriched_text"]["sentiment"]["document"]["score"])
+                    entitiesDict[entityName]["count"] += 1
+    # turn sentiments into percentages
+    for key in sentiments:
+        sentiments[key] = sentiments[key]/totalComments * 100
+    for key in entitiesDict:
+        lengthOfList = len(entitiesDict[key])
+        entitiesDict[key]["score"] = sum(entitiesDict[key]["score"])/lengthOfList
+    newDict = {}
+    newDict["entitiesResults"] = entitiesDict
+    newDict["sentimentsResults"] = sentiments
+    return jsonify(results=newDict)
+    
 
 ## To fetch summary data about a YouTube video on initial submit
 @app.route('/api/video')

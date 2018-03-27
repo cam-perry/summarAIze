@@ -32,8 +32,14 @@ def setUpCollection(videoId, app):
         new_collection = discovery.create_collection(environment_id=environment_id, name=videoId)
         collection_id = new_collection["collection_id"]
 
-        return environment_id, collection_id
+        # Record environment_id, collection_id
+        file = open("id.txt","w")
+        file.write(environment_id)
+        file.write('\n')
+        file.write(collection_id)
+        file.close()
 
+        return environment_id, collection_id
 
 def uploadDocsToWatson(comments, environment_id, collection_id):
     for comment in comments:
