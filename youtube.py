@@ -18,11 +18,33 @@ import time
 from watson import uploadDocsToWatson
 
 
+# find's a channel by owner's YouTube username
+# returns the ID of the uploads playlist
+def getUploadsId(channel_name):
+    base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&forUsername='
+    base_url += channel_name
+    print(base_url)
+    res = requests.get(base_url).json()
+
+    if len(res['items']) == 0:
+        return 'error: no channel'
+    elif len(res['items']) > 1:
+        return 'error: multiple channels'
+    else:
+        return res['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+
+# pulls all videos from a playlist by id
+# returns an array of these video objects
+def getVideosFromPlaylist(playlistId):
+    url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=6&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&playlistId='
+    url += playlistId
+    res = requests.get(url).json()
+    return res['items']
+
 def getVideoData(videoId):
     base_url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&id='
     res = requests.get(base_url + videoId)
     return res.json()
-
 
 ## recursive function to collect all top level comments on a video
 ## call with the video's ID as videoId

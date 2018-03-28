@@ -55,6 +55,34 @@ table {
   }
 
   /*******************/
+  /*Channel and Video*/
+  /*******************/
+
+  #cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  #cards-container .card {
+    flex: 0 1 20rem;
+    margin: auto;
+    margin-bottom: 1em;
+  }
+
+  #cards-container .card .card-text {
+    height: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #cards-container .card .card-title {
+    height: 50px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+
+  /*******************/
   /*Top Entities List*/
   /*******************/
 

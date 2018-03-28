@@ -18,6 +18,8 @@ from flask import Flask, jsonify, request
 from youtube import getTopLevelComments
 from youtube import getReplies
 from youtube import getVideoData
+from youtube import getUploadsId
+from youtube import getVideosFromPlaylist
 
 from watson import setUpCollection
 from watson import checkUploadCount
@@ -34,6 +36,11 @@ app = Flask(__name__)
 @app.route('/')
 def Welcome():
     return app.send_static_file('index.html')
+
+@app.route('/api/channel')
+def getVideos():
+    uploadsId = getUploadsId(request.args.get('channelId'))
+    return jsonify(results=getVideosFromPlaylist(uploadsId))
 
 @app.route('/api/analyze')
 def Analyze():
@@ -128,13 +135,6 @@ def checkUploadStatus():
     collection_id = request.args.get('collection_id')
     results = checkUploadCount(environment_id, collection_id)
     return jsonify(results=results)
-
-@app.route('/api/people/<name>')
-def SayHello(name):
-    message = {
-        'message': 'Hello ' + name
-    }
-    return jsonify(results=message)
 
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
