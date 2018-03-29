@@ -82,11 +82,16 @@ table {
     width: 100%;
   }
 
+  /*******************/
+  /*Overall Sentiment*/
+  /*******************/
+  #overall-sentiment {
+    margin-top: 150px;
+  }
 
   /*******************/
   /*Top Entities List*/
   /*******************/
-
   #top-entities .list-group-item {
     display: flex;
     justify-content: space-between;
