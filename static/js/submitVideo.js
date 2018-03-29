@@ -18,7 +18,8 @@ $('#cards-container').on('click', '.video-selector', (evt) => {
         url: '/api/video?videoId=' + videoId,
         method: 'GET',
         success: function(response) {
-
+          // store this globally for testing on analyze page
+          var VIDEO = response.results.items[0];
           const total_comments = response.results.items[0].statistics.commentCount;
 
           // display success message and create progress bar
@@ -97,18 +98,8 @@ function waitForWatsonUploads(env_id, col_id, total_comments, videoId) {
           );
           $('#progress-box').html('')
 
-          window.location.href = "/analyze.html?video=" + videoId
-
-          /*$.ajax({
-     url: '/api/analyze',
-     method: 'GET',
-     beforeSend: function() { },
-     success: function(response) {
-       console.log(response.results);
-    },
-              error: function(error){
-          }
-    })*/
+          // push over to the analyze page
+          window.location.href = "/analyze?video=" + videoId
 
         } else {
           // if not done, keep checking every 2 seconds

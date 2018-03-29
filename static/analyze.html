@@ -2,7 +2,6 @@
 <html lang="en">
 
   <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -12,21 +11,15 @@
 
     <!-- Bootstrap core CSS -->
     <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Custom fonts for this template -->
     <link href="static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-
     <!-- Plugin CSS -->
     <link href="static/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
-
     <!-- Custom styles for this template -->
-
     <link href="static/css/freelancer.css" rel="stylesheet">
-
     <link href='static/css/our_css.css' rel='stylesheet'>
-
     <script src="static/js/functionStuff.js"></script>
 
   </head>
@@ -59,47 +52,21 @@
       </div>
     </nav>
 
-
-      <!-- Button -->
-
-      <div class='container url_form' >
-        <div class='row' id='URL_Lines'>
-          <div class='col-12 col-lg-6'>
-            <input type="text" class='form-control' Name="YTurl" id="YTurl" size="30" maxlength="50" placeholder='Input YouTube URL to summarAIze' />
-          </div>
-          <div class='col-12 col-lg-2'>
-            <input type="submit" Name="submit" value="summarAIze" class="btn btn-danger" id='submit-btn' />
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-12 col-lg-8 offset-lg-2' id='alert-box'>
-          </div>
-        </div>
-        <div class='row'>
-          <div class='col-12 col-lg-8 offset-lg-2' id='progress-box'>
-          </div>
-        </div>
-      </div>
-
-<!--barchart-->
+    <!--barchart-->
     <div class='chart--container' id="barchart"></div>
 
-
-
-      <!-- Display Top Entities -->
-
-    <section id="Top_Entities">
-          <h1>Top Entities</h1>
-                <section class="HalfOfList">
-                    <div class="innerColumn">
-                        <p>Here is a list of the top entities for the video: </p>
-                        <div id="displayList"></div>
-                    </div>
-                </section>
+    <!-- Display Top Entities -->
+    <section id="top-entities">
+        <h1>Top Entities</h1>
+            <section class="HalfOfList">
+                <div class="innerColumn">
+                    <p>Here is a list of the top entities for the video: </p>
+                    <div id="displayList"></div>
+                  </div>
+            </section>
     </section>
 
-      <!-- Display Table of Comments -->
-
+    <!-- Display Table of Comments -->
     <section id=Bottom_padding>
           <h1>Comments Summary</h1>
                   <section class="HalfOfList">
@@ -186,8 +153,7 @@
     <!-- Custom scripts for this template -->
     <script src="static/js/freelancer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.min.js"></script>
-    <script src="static/js/ourJS.js"></script>
-    <script src="static/js/submitVideo.js"></script>
+    <script src="static/js/gatherAnalysis.js"></script>
 
   </body>
 

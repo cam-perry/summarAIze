@@ -37,6 +37,11 @@ app = Flask(__name__)
 def Welcome():
     return app.send_static_file('index.html')
 
+@app.route('/analyze')
+def Analysis():
+    return app.send_static_file('analyze.html')
+
+
 @app.route('/api/channel')
 def getVideos():
     uploadsId = getUploadsId(request.args.get('channelId'))
@@ -72,7 +77,7 @@ def Analyze():
         elif sentiment >= 0 and sentiment < 0.25:
             sentiments['0.00to0.25'] += 1
         elif sentiment >= 0.25 and sentiment < 0.5:
-            sentiments['0.25to0.50'] += 1            
+            sentiments['0.25to0.50'] += 1
         elif sentiment >= 0.5 and sentiment < 0.75:
             sentiments['0.50to0.75'] += 1
         elif sentiment >= 0.75 and sentiment < 1:
@@ -96,7 +101,7 @@ def Analyze():
     newDict["entitiesResults"] = entitiesDict
     newDict["sentimentsResults"] = sentiments
     return jsonify(results=newDict)
-    
+
 
 ## To fetch summary data about a YouTube video on initial submit
 @app.route('/api/video')
