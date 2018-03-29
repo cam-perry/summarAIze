@@ -22,9 +22,6 @@ h1 {
 #Bottom_padding {
     margin-bottom: 50px;
 }
-#Top_Entities {
-    margin-top: 30px;
-}
 
 table {
     width:100%;
@@ -90,24 +87,13 @@ table {
   /*Top Entities List*/
   /*******************/
 
-  .innerColumn {
-    margin-left: 5px;
-  margin-right: 5px;
-  padding: 10px;
-    border-style: solid;
-    border-color:black;
-    border-width:thin;
+  #top-entities .list-group-item {
+    display: flex;
+    justify-content: space-between;
   }
-
-  .HalfOfList{
-    margin : auto;
-    width:50%;
+  #top-entities .list-group-item p {
+    margin: 0;
   }
-
-  ul li {
-
-  }
-
   /*******************/
   /*Responsive Design*/
   /*******************/
