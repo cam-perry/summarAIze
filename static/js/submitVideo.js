@@ -1,5 +1,9 @@
 $('#cards-container').on('click', '.video-selector', (evt) => {
       console.log(evt)
+
+      // disable the other buttons
+      $('.video-selector').addClass('disabled');
+
       $('#alert-box').html('')
       $('#alert-box').html(
         '<div class="alert alert-info">' +
