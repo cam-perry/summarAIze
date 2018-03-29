@@ -5,6 +5,10 @@ $.ajax({
     console.log(response.results);
     displayEntities(response.results.entitiesResults);
     createChart(response.results.sentimentsResults);
+    /*
+      KATIE: TRIGGER YOUR FUNCTION TO WRITE COMMENT SUMMARY HERE
+    */
+
   },
   error: function(error) {
     console.log(error);
