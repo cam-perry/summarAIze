@@ -16,20 +16,30 @@ $('#channel-submit-btn').on('click', () => {
       success: function(response) {
         const videos = response.results;
         let cards = '';
-        videos.forEach( video => {
-          cards += (
-            '<div class="card">' +
-              '<img class="card-img-top" src="' + video.snippet.thumbnails.high.url + '" alt="Card image cap">' +
-              '<div class="card-body">' +
-                '<h5 class="card-title">' + video.snippet.title + '</h5>' +
-                '<p class="card-text">' + video.snippet.description + '</p>' +
-                '<a href="#" class="btn btn-danger">summarAIze</a>' +
-              '</div>' +
+        // catch channel-finding errors handled in the backend and display error messaged
+        if (['error: no channel', 'error: multiple channels'].includes(videos)) {
+          $('#alert-box').html(
+            '<div class="alert alert-danger">' +
+            '<strong>Sorry...</strong> we couldn\'t find a YouTube user by that name.' +
             '</div>'
-          )
-        })
-        $('#cards-container').html('')
-        $('#cards-container').html(cards)
+          );
+        } else {
+          videos.forEach( video => {
+            const videoId = video.snippet.resourceId.videoId;
+            cards += (
+              '<div class="card">' +
+                '<img class="card-img-top" src="' + video.snippet.thumbnails.high.url + '" alt="Card image cap">' +
+                '<div class="card-body">' +
+                  '<h5 class="card-title"><a target="_blank" href="https://youtube.com/watch/?v=' + videoId + '">' + video.snippet.title + '</a></h5>' +
+                  '<p class="card-text">' + video.snippet.description + '</p>' +
+                  '<a href="#" class="btn btn-danger video-selector" id="' + videoId + '">summarAIze</a>' +
+                '</div>' +
+              '</div>'
+            )
+          })
+          $('#cards-container').html('')
+          $('#cards-container').html(cards)
+        }
       }
     });
 });

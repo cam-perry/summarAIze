@@ -40,7 +40,10 @@ def Welcome():
 @app.route('/api/channel')
 def getVideos():
     uploadsId = getUploadsId(request.args.get('channelId'))
-    return jsonify(results=getVideosFromPlaylist(uploadsId))
+    if uploadsId in ['error: no channel', 'error: multiple channels']:
+        return jsonify(results=uploadsId)
+    else:
+        return jsonify(results=getVideosFromPlaylist(uploadsId))
 
 @app.route('/api/analyze')
 def Analyze():
