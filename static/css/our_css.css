@@ -44,6 +44,20 @@ table {
   /*******************/
   /*Channel and Video*/
   /*******************/
+
+   #landing-page .jumbotron h1,
+   #landing-page .jumbotron h2 {
+     text-align: center;
+   }
+
+   #landing-page .jumbotron h2 {
+      margin-bottom: 1em;
+    }
+
+   body.landing-page {
+    background-image: url('../img/background.png');
+   }
+
   .url_form {
       margin-top: 190px;
       margin-bottom: 50px;
