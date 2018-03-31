@@ -1,14 +1,4 @@
-.url_form {
-    margin-top: 190px;
-    margin-bottom: 50px;
-}
 
-#alert-box {
-  margin-top: 10px;
-}
-#submit-btn {
-    width: 100%;
-}
 
 @media screen and (max-width:768px){
     #submit-btn {
@@ -32,9 +22,6 @@ h1 {
 #Bottom_padding {
     margin-bottom: 50px;
 }
-#Top_Entities {
-    margin-top: 30px;
-}
 
 table {
     width:100%;
@@ -55,27 +42,84 @@ table {
   }
 
   /*******************/
-  /*Top Entities List*/
+  /*Channel and Video*/
   /*******************/
 
-  .innerColumn {
-    margin-left: 5px;
-  margin-right: 5px;
-  padding: 10px;
-    border-style: solid;
-    border-color:black;
-    border-width:thin;
+   #landing-page .jumbotron h1,
+   #landing-page .jumbotron h2 {
+     text-align: center;
+     color: white;
+   }
+
+   #landing-page .jumbotron h2 {
+      margin-bottom: 1em;
+    }
+
+   body.landing-page {
+    background-image: url('../img/background.png');
+   }
+
+    #landing-page .jumbotron {
+    background-color: rgba(44,62,80, 0.9);
+    }
+
+  .url_form {
+      margin-top: 190px;
+      margin-bottom: 50px;
   }
 
-  .HalfOfList{
-    margin : auto;
-    width:50%;
+  #alert-box {
+    margin-top: 10px;
+  }
+  #channel-submit-btn {
+      width: 100%;
+  }
+  #cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 1em;
   }
 
-  ul li {
-
+  #cards-container .card {
+    flex: 0 1 20rem;
+    margin: auto;
+    margin-bottom: 1em;
+    border-color: rgba(44,62,80, 0.9);
   }
 
+  #cards-container .card .card-text {
+    height: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #cards-container .card .card-title {
+    height: 50px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  #cards-container .card .btn {
+    width: 100%;
+  }
+
+  /*******************/
+  /*Overall Sentiment*/
+  /*******************/
+  #overall-sentiment {
+    margin-top: 150px;
+  }
+
+  /*******************/
+  /*Top Entities List*/
+  /*******************/
+  #top-entities .list-group-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  #top-entities .list-group-item p {
+    margin: 0;
+  }
   /*******************/
   /*Responsive Design*/
   /*******************/

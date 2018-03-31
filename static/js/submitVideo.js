@@ -1,25 +1,25 @@
-$('#submit-btn').on('click', () => {
+$('#cards-container').on('click', '.video-selector', (evt) => {
+      console.log(evt)
 
-    // parse the videoId from the videoUrl and validate
-    const url_split = $('#YTurl').val().split('?v=');
+      // disable the other buttons
+      $('.video-selector').addClass('disabled');
 
-    if (url_split.length >= 2 && url_split[1].length === 11) {
-      // valid videoId submitted
-
+      $('#alert-box').html('')
       $('#alert-box').html(
         '<div class="alert alert-info">' +
-        'Attempting to find your YouTube video.' +
+        'Gathering comments for video ' + evt.target.id +
         '</div>'
       );
 
-      const videoId = url_split[1];
+      const videoId = evt.target.id;
 
       // first pull the summary data about the video
       $.ajax({
         url: '/api/video?videoId=' + videoId,
         method: 'GET',
         success: function(response) {
-
+          // store this globally for testing on analyze page
+          var VIDEO = response.results.items[0];
           const total_comments = response.results.items[0].statistics.commentCount;
 
           // display success message and create progress bar
@@ -44,7 +44,7 @@ $('#submit-btn').on('click', () => {
                $('#YTurl').prop('disabled', true);
              },
              success: function(response) {
-               waitForWatsonUploads(response.results.environment_id, response.results.collection_id, total_comments);
+               waitForWatsonUploads(response.results.environment_id, response.results.collection_id, total_comments, videoId);
              },
              error: function() {
                $('#alert-box').html('')
@@ -58,21 +58,13 @@ $('#submit-btn').on('click', () => {
         }
       })
 
-    } else {
-      // invalid videoId
-      $('#alert-box').html(
-        '<div class="alert alert-danger">' +
-        '<strong>Invalid URL!</strong> Please copy and paste a video URL from your web browser.' +
-        '</div>'
-      )
-    }
     return false;
 });
 
 
 // this function runs a loop until the comments are all uploaded (can track failures and processing)
 // responsible for updating progress bar as it goes, and triggering analytics in backend when complete
-function waitForWatsonUploads(env_id, col_id, total_comments) {
+function waitForWatsonUploads(env_id, col_id, total_comments, videoId) {
 
 
    let new_count;
@@ -97,7 +89,6 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
       }
     }).then( () => {
         if (is_done) {
-            console.log('this happened');
           // complete the function if total response count is reached
           $('#alert-box').html('')
           $('#alert-box').html(
@@ -106,21 +97,14 @@ function waitForWatsonUploads(env_id, col_id, total_comments) {
             '</div>'
           );
           $('#progress-box').html('')
-          $.ajax({
-     url: '/api/analyze',
-     method: 'GET',
-     beforeSend: function() { },
-     success: function(response) {
-       console.log(response.results);
-    },
-              error: function(error){
-          }
-    })
+
+          // push over to the analyze page
+          window.location.href = "/analyze?video=" + videoId
 
         } else {
           // if not done, keep checking every 2 seconds
           setTimeout( function() {
-            waitForWatsonUploads(env_id, col_id, total_comments)
+            waitForWatsonUploads(env_id, col_id, total_comments, videoId)
           }, 2000)
         }
     })
