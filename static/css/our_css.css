@@ -48,6 +48,7 @@ table {
    #landing-page .jumbotron h1,
    #landing-page .jumbotron h2 {
      text-align: center;
+     color: white;
    }
 
    #landing-page .jumbotron h2 {
@@ -57,6 +58,10 @@ table {
    body.landing-page {
     background-image: url('../img/background.png');
    }
+
+    #landing-page .jumbotron {
+    background-color: rgba(44,62,80, 0.9);
+    }
 
   .url_form {
       margin-top: 190px;
@@ -73,12 +78,14 @@ table {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    margin-top: 1em;
   }
 
   #cards-container .card {
     flex: 0 1 20rem;
     margin: auto;
     margin-bottom: 1em;
+    border-color: rgba(44,62,80, 0.9);
   }
 
   #cards-container .card .card-text {
