@@ -106,9 +106,24 @@ table {
   /*******************/
   /*Overall Sentiment*/
   /*******************/
+  #analyze-page {
+    margin-bottom: 1em;
+  }
+  .analyze-header {
+    margin: 1em 0;
+  }
   #overall-sentiment {
     margin-top: 150px;
   }
+
+  /*******************/
+  /* Loading Spinner */
+  /*******************/
+  #loading-spinner {
+    margin-top: 30%;
+    text-align: center;
+  }
+
 
   /*******************/
   /*Top Entities List*/

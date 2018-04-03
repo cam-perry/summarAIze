@@ -52,37 +52,40 @@
       </div>
     </nav>
 
-    <!--barchart-->
-    <div class='container' id='overall-sentiment'>
+
+    <div class='container' id='analyze-page'>
+
       <div class='row'>
+        <div class='col-12' id='loading-spinner'>
+          <img src='https://loading.io/spinners/fidget-spinner/lg.fidget-spinner.gif' alt='loading' />
+        </div>
+      </div>
+
+      <!--barchart-->
+      <div class='row' id='overall-sentiment'>
         <div class='col-12'>
-          <h1>Overall Sentiment</h1>
+          <h1 class='analyze-header' id='sentiment-header'></h1>
           <div class='chart--container' id="barchart"></div>
         </div>
       </div>
-    </div>
 
     <!-- Display Top Entities -->
-    <div class='container'>
       <div class='row'>
         <div class='col-10 offset-1'>
-          <h1>Top Entities</h1>
+          <h1 class='analyze-header' id='entities-header'></h1>
           <ul class='list-group' id='top-entities'></ul>
         </div>
       </div>
-    </div>
 
     <!-- Display Table of Comments -->
-    <section id=Bottom_padding>
-      <div class='container'>
-        <div class='row'>
-          <div class='col-10 offset-1'>
-          <h1>Comments Summary</h1>
+      <div class='row'>
+        <div class='col-10 offset-1'>
+          <h1 class='analyze-header' id='comments-header'></h1>
           <div id="commentSection"></div>
         </div>
       </div>
+
     </div>
-    </section>
 
     <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
     <div class="scroll-to-top d-lg-none position-fixed ">

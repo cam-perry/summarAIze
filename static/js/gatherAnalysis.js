@@ -5,6 +5,7 @@ $.ajax({
     createChart(response.results.sentimentsResults);
     displayEntities(response.results.entitiesResults);
     displayComments(response.results.commentResults);
+    $('#loading-spinner').css('display', 'none');
   },
   error: function(error) {
     console.log(error);
@@ -55,6 +56,7 @@ function displayComments(commentSummary) {
   }
   insert += '</ul>'
   $('#commentSection').html(insert);
+  $('#comments-header').html('Similar Comment Summary');
 }
 
 function displayEntities(entities) {
@@ -75,6 +77,8 @@ function displayEntities(entities) {
       )
   }
   $('#top-entities').html(insert);
+  $('#entities-header').html('Most Discussed Subjects');
+
   // initialize the popovers
   $(function () {
     $('[data-toggle="popover"]').popover()
@@ -142,6 +146,7 @@ function createChart(labels) {
           "% of comments": labels['0.75to0.25']
       },
   ]);
+  $('#sentiment-header').html('Overall Sentiment');
 }
 
 
