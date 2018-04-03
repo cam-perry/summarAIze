@@ -2,10 +2,10 @@ $.ajax({
   url: '/api/analyze',
   method: 'GET',
   success: function(response) {
-    console.log(response.results);
-    displayEntities(response.results.entitiesResults);
     createChart(response.results.sentimentsResults);
+    displayEntities(response.results.entitiesResults);
     displayComments(response.results.commentResults);
+    $('#loading-spinner').css('display', 'none');
   },
   error: function(error) {
     console.log(error);
@@ -19,18 +19,29 @@ function displayComments(commentSummary) {
   insert += '<ul class="list-group">'
   for (let i = 0; i < 5; i++) {
     let summary = revCommentSummary[i];
-    let comments = summary[0]
+    let comments = summary[0];
     let randComment = comments[Math.floor(Math.random() * comments.length)]
-    let frequency = summary[2]
-    insert += '<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#comment'+i.toString()+'">'
+    let frequency = summary[2];
+
+    const ending_chars = summary[1].slice(summary[1].length - 2);
+    const is_negative = ending_chars[0] === '-';
+    const rating = ending_chars[1];
+    const li_colouring = rating === '0' ? 'list-group-item-secondary' : (is_negative ? 'list-group-item-danger' : 'list-group-item-success');
+
+    const entity = is_negative ? summary[1].slice(0, summary[1].length - 2) : summary[1].slice(0, summary[1].length - 1);
+
+    insert += '<li class="list-group-item ' + li_colouring + '" data-toggle="collapse" data-target="#comment'+i.toString()+'">'
+    insert += '<div class="comment-summary-item">'
+    // the entity identified
+    insert += '<p class="entity-name">' + entity[0].toUpperCase() + entity.slice(1).toLowerCase() + '</p>'
     //comment here
-    insert += randComment;
-    insert += '<span class="badge badge-primary badge-pill">'
-    //number here
-    insert += frequency.toString()
-    insert += '</span></li>'
-    insert += '<div id="comment'+i.toString()+'" class="collapse">'
-    insert += "Similar Comments:<br /><br />"
+    insert += '<p class="repr-comment">' + randComment + '</p>';
+    // count of the mentions
+    insert += '<p class="comment-count">' + frequency.toString() + (frequency > 1 ? ' comments' : ' comment') + '</p>';
+    // end of the always-shown comment summary
+    insert += '</div>';
+    insert += '<div id="comment'+i.toString()+'" class="collapse">';
+    insert += '<h6 class="similar-comments-header">Similar Comments:</h6>';
     let similarComments = 0;
     for (let i = 0; i < Math.min(5,comments.length); i++){
       if(comments[i] != randComment){
@@ -41,18 +52,17 @@ function displayComments(commentSummary) {
     if (similarComments == 0){
       insert += "None"
     }
-    insert += '</div>'
+    insert += '</div></li>'
   }
   insert += '</ul>'
-  console.log("This happened");
   $('#commentSection').html(insert);
+  $('#comments-header').html('Similar Comment Summary');
 }
 
 function displayEntities(entities) {
   const sorted_entities = sortEntities(entities);
   let max = sorted_entities.length < 10 ? sorted_entities.length : 10;
   let insert = '';
-  console.log(sorted_entities);
   for (let i=0; i < max; i++) {
     const li_class = sorted_entities[i].score < 0 ? 'list-group-item-danger' : 'list-group-item-success';
     const {title, count, score} = sorted_entities[i];
@@ -67,6 +77,8 @@ function displayEntities(entities) {
       )
   }
   $('#top-entities').html(insert);
+  $('#entities-header').html('Most Discussed Subjects');
+
   // initialize the popovers
   $(function () {
     $('[data-toggle="popover"]').popover()
@@ -74,6 +86,7 @@ function displayEntities(entities) {
 }
 
 function sortEntities(entities) {
+  // bubbles sort the entities list from most to least counted
   let entities_array = [];
   Object.keys(entities).forEach( function(entity){
     entities_array.push({
@@ -133,6 +146,7 @@ function createChart(labels) {
           "% of comments": labels['0.75to0.25']
       },
   ]);
+  $('#sentiment-header').html('Overall Sentiment');
 }
 
 

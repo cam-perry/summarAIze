@@ -106,9 +106,24 @@ table {
   /*******************/
   /*Overall Sentiment*/
   /*******************/
+  #analyze-page {
+    margin-bottom: 1em;
+  }
+  .analyze-header {
+    margin: 1em 0;
+  }
   #overall-sentiment {
     margin-top: 150px;
   }
+
+  /*******************/
+  /* Loading Spinner */
+  /*******************/
+  #loading-spinner {
+    margin-top: 30%;
+    text-align: center;
+  }
+
 
   /*******************/
   /*Top Entities List*/
@@ -120,6 +135,36 @@ table {
   #top-entities .list-group-item p {
     margin: 0;
   }
+  /*******************/
+  /* Comment Summary */
+  /*******************/
+  .comment-summary-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  .comment-summary-item .entity-name {
+    margin: 0;
+    font-weight: bold;
+    min-width: 80px;
+  }
+  .comment-summary-item .repr-comment {
+    margin: 0;
+    margin-left: 1em;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .comment-summary-item .comment-count {
+    margin: 0;
+    margin-left: 1em;
+    min-width: 80px;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+  .similar-comments-header {
+      margin-top: 2em;
+  }
+
+
   /*******************/
   /*Responsive Design*/
   /*******************/
