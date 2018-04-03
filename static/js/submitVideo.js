@@ -26,7 +26,7 @@ $('#cards-container').on('click', '.video-selector', (evt) => {
           $('#alert-box').html('')
           $('#alert-box').html(
             '<div class="alert alert-success">' +
-            '<strong>Success!</strong> Fetching and analzying ' + total_comments + ' comments.' +
+            '<strong>Success!</strong> Fetching and analyzing ' + total_comments + ' comments.' +
             '</div>'
           );
           $('#progress-box').html('')
