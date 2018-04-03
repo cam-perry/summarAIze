@@ -5,15 +5,37 @@ $.ajax({
     console.log(response.results);
     displayEntities(response.results.entitiesResults);
     createChart(response.results.sentimentsResults);
-    /*
-      KATIE: TRIGGER YOUR FUNCTION TO WRITE COMMENT SUMMARY HERE
-    */
-
+    displayComments(response.results.commentResults);
   },
   error: function(error) {
     console.log(error);
   }
 })
+
+// display comments
+function displayComments(commentSummary) {
+  revCommentSummary = commentSummary.reverse();
+  let insert = '';
+  insert += '<ul class="list-group">'
+  for (let i = 0; i < 5; i++) {
+    let summary = revCommentSummary[i];
+    console.log(summary)
+    let comments = summary[0]
+    let randComment = comments[Math.floor(Math.random() * comments.length)]
+    let frequency = summary[2]
+    console.log(frequency)
+    insert += '<li class="list-group-item d-flex justify-content-between align-items-center">'
+    //comment here
+    insert += randComment;
+    insert += '<span class="badge badge-primary badge-pill">'
+    //number here
+    insert += frequency.toString()
+    insert += '</span></li>'
+  }
+  insert += '</ul>'
+  console.log("This happened");
+  $('#commentSection').html(insert);
+}
 
 function displayEntities(entities) {
   const sorted_entities = sortEntities(entities);
