@@ -19,18 +19,29 @@ function displayComments(commentSummary) {
   insert += '<ul class="list-group">'
   for (let i = 0; i < 5; i++) {
     let summary = revCommentSummary[i];
-    console.log(summary)
     let comments = summary[0]
     let randComment = comments[Math.floor(Math.random() * comments.length)]
     let frequency = summary[2]
-    console.log(frequency)
-    insert += '<li class="list-group-item d-flex justify-content-between align-items-center">'
+    insert += '<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#comment'+i.toString()+'">'
     //comment here
     insert += randComment;
     insert += '<span class="badge badge-primary badge-pill">'
     //number here
     insert += frequency.toString()
     insert += '</span></li>'
+    insert += '<div id="comment'+i.toString()+'" class="collapse">'
+    insert += "Similar Comments:<br /><br />"
+    let similarComments = 0;
+    for (let i = 0; i < Math.min(5,comments.length); i++){
+      if(comments[i] != randComment){
+        insert += comments[i] + "<br /><br />";
+        similarComments += 1;
+      }
+    }
+    if (similarComments == 0){
+      insert += "None"
+    }
+    insert += '</div>'
   }
   insert += '</ul>'
   console.log("This happened");
