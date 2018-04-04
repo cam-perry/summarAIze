@@ -1,27 +1,14 @@
-# Copyright 2015 IBM Corp. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 import requests
 import threading
 import time
 from watson import uploadDocsToWatson
-
+from config import youtubeKey
 
 # find's a channel by owner's YouTube username
 # returns the ID of the uploads playlist
 def getUploadsId(channel_name):
-    base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&forUsername='
+    base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&key=' + youtubeKey + '&forUsername='
     base_url += channel_name
     print(base_url)
     res = requests.get(base_url).json()
@@ -36,20 +23,20 @@ def getUploadsId(channel_name):
 # pulls all videos from a playlist by id
 # returns an array of these video objects
 def getVideosFromPlaylist(playlistId):
-    url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=6&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&playlistId='
+    url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=6&key=' + youtubeKey + '&playlistId='
     url += playlistId
     res = requests.get(url).json()
     return res['items']
 
 def getVideoData(videoId):
-    base_url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&id='
+    base_url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&key=' + youtubeKey + '&id='
     res = requests.get(base_url + videoId)
     return res.json()
 
 ## recursive function to collect all top level comments on a video
 ## call with the video's ID as videoId
 def getTopLevelComments(videoId, environment_id, collection_id, nextPageToken=''):
-    base_url = 'https://www.googleapis.com/youtube/v3/commentThreads?maxResults=100&part=snippet&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&videoId='
+    base_url = 'https://www.googleapis.com/youtube/v3/commentThreads?maxResults=100&part=snippet&key=' + youtubeKey + '&videoId='
     base_url += videoId
     query = base_url if nextPageToken == '' else base_url + '&pageToken=' + nextPageToken
     res = requests.get(query)
@@ -75,7 +62,7 @@ def getTopLevelComments(videoId, environment_id, collection_id, nextPageToken=''
 ## recursive function to collect all replies to a top level comment
 ## call with the top level comment's ID as parentId
 def getReplies(parentId, videoId, environment_id, collection_id, nextPageToken=''):
-    base_url = 'https://www.googleapis.com/youtube/v3/comments?part=snippet&key=AIzaSyCRJexp3hVDSOkrZJbGX7HdrY55HVFK8Rw&textFormat=plainText&maxResults=100&parentId='
+    base_url = 'https://www.googleapis.com/youtube/v3/comments?part=snippet&key=' + youtubeKey + '&textFormat=plainText&maxResults=100&parentId='
     base_url += parentId
     query = base_url if nextPageToken == '' else base_url + '&pageToken=' + nextPageToken
     res = requests.get(query)

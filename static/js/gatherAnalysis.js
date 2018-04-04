@@ -2,7 +2,6 @@ $.ajax({
   url: '/api/analyze',
   method: 'GET',
   success: function(response) {
-    console.log(response.results);
     createChart(response.results.sentimentsResults);
     displayEntities(response.results.entitiesResults);
     displayComments(response.results.commentResults);
@@ -31,7 +30,7 @@ function displayComments(commentSummary) {
 
     const entity = is_negative ? summary[1].slice(0, summary[1].length - 2) : summary[1].slice(0, summary[1].length - 1);
 
-    insert += '<li class="list-group-item ' + li_colouring + '" data-toggle="collapse" data-target="#comment'+i.toString()+'">'
+    insert += '<li class="list-group-item list-group-item-action ' + li_colouring + '" data-toggle="collapse" data-target="#comment'+i.toString()+'">'
     insert += '<div class="comment-summary-item">'
     // the entity identified
     insert += '<p class="entity-name">' + entity[0].toUpperCase() + entity.slice(1).toLowerCase() + '</p>'
