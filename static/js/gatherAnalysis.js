@@ -122,7 +122,7 @@ function createChart(labels) {
           "% of comments": labels['-0.75to-0.50']
       },
       {
-          label: "0.50",
+          label: "-0.50",
           "% of comments": labels['-0.50to-0.25']
       },
       {
@@ -139,11 +139,11 @@ function createChart(labels) {
       },
       {
           label: "0.50",
-          "% of comments": labels['0.50to1.00']
+          "% of comments": labels['0.50to0.75']
       },
       {
           label: "0.75",
-          "% of comments": labels['0.75to0.25']
+          "% of comments": labels['0.75to1.00']
       },
   ]);
   $('#sentiment-header').html('Overall Sentiment');
