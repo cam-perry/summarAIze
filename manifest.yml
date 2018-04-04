@@ -3,7 +3,7 @@ applications:
   memory: 128M
   instances: 1
   domain: mybluemix.net
-  name: Twitter COMM 493 Test
-  host: Twitter-COMM-493-Test
+  name: summarAIze
+  host: 493-summarAIze
   disk_quota: 1024M
   buildpack: python_buildpack
