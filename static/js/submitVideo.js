@@ -14,6 +14,7 @@ $('#cards-container').on('click', '.video-selector', (evt) => {
 
       // disable the other buttons
       $('.video-selector').addClass('disabled');
+      $('#channel-submit-btn').addClass('disabled');
 
       $('#alert-box').html('')
       $('#alert-box').html(

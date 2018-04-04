@@ -2,6 +2,7 @@ $.ajax({
   url: '/api/analyze',
   method: 'GET',
   success: function(response) {
+    console.log(response.results);
     createChart(response.results.sentimentsResults);
     displayEntities(response.results.entitiesResults);
     displayComments(response.results.commentResults);

@@ -58,7 +58,7 @@ def Analyze():
     c_id = file.readline().strip()
     file.close()
     my_query = discovery.query(environment_id=e_id, collection_id=c_id, query='', count=9999)
-    #print(my_query)
+
     # Finds entities and how many times they are mentioned
     entitiesDict = {}
     sentiments = {'-1.0to-0.75':0,'-0.75to-0.50':0,'-0.50to-0.25':0,'-0.25to0.00':0,'0.00to0.25':0,'0.25to0.50':0,'0.50to0.75':0, '0.75to1.00':0}
@@ -66,6 +66,7 @@ def Analyze():
     commentSummary2Dict = {}
     commentSummary3Dict = {}
     totalComments = 0
+
     #Loop and fill dictionaries
     for comment in my_query["results"]:
         totalComments += 1
@@ -122,8 +123,14 @@ def Analyze():
 
         # comment summary method 2 - a bit better
         theComment = comment["text"].lower()
-        tokens = nltk.word_tokenize(theComment)
-        tagged = nltk.pos_tag(tokens)
+        print('Got to pre-nltk')
+        try:
+            tokens = nltk.word_tokenize(theComment)
+            tagged = nltk.pos_tag(tokens)
+        except Exception as error:
+            print(error)
+            tagged = []
+
         wordList = []
         for word in tagged:
             if word[1][0] == "N" and len(word[0]) > 1 and word[0] not in wordList:  #make sure we don't double count same word multiple times in one comment
@@ -206,4 +213,4 @@ def checkUploadStatus():
 
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=int(port))
+    app.run(host='0.0.0.0', port=int(port))
