@@ -1,5 +1,16 @@
+// makes it so that you can press enter to submit the channel button
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      $('#channel-submit-btn').click();
+      return false;
+    }
+  });
+});
+
+
 $('#cards-container').on('click', '.video-selector', (evt) => {
-      console.log(evt)
 
       // disable the other buttons
       $('.video-selector').addClass('disabled');
@@ -17,6 +28,9 @@ $('#cards-container').on('click', '.video-selector', (evt) => {
       $.ajax({
         url: '/api/video?videoId=' + videoId,
         method: 'GET',
+        beforeSend: function() {
+          window.location.href = "/#"
+        },
         success: function(response) {
           // store this globally for testing on analyze page
           var VIDEO = response.results.items[0];
