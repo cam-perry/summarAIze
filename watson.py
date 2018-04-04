@@ -1,6 +1,5 @@
-import os
 import json
-import csv
+import nltk
 
 from config import discovery
 
@@ -48,7 +47,6 @@ def uploadDocsToWatson(comments, environment_id, collection_id):
 def checkUploadCount(environment_id, collection_id):
     # Gets collection info
     collection = discovery.get_collection(environment_id=environment_id, collection_id=collection_id)
-    print(collection['document_counts']['available'])
     # return the number of available documents
 
     return collection['document_counts']
@@ -104,33 +102,31 @@ def performAnalysis():
                     entitiesDict[entityName]["count"] += 1
 
         # comment summary method 1 - not great
-            entitiesList = ""
-            for entity in comment["enriched_text"]["entities"]:
-                entitiesList += entity["text"] + ", "
-            if sentiment > 0:
-                entitiesList += str(1)
-            elif sentiment < 0:
-                entitiesList += str(-1)
-            else:
-                entitiesList += str(0)
+        entitiesList = ""
+        for entity in comment["enriched_text"]["entities"]:
+            entitiesList += entity["text"] + ", "
+        if sentiment > 0:
+            entitiesList += str(1)
+        elif sentiment < 0:
+            entitiesList += str(-1)
+        else:
+            entitiesList += str(0)
 
-            if entitiesList not in commentSummary1Dict:
-                # list that tracks similar comments
-                comments = []
-                comments.append(comment["text"])
-                commentSummary1Dict[entitiesList] = [comments,1]
-            else:
-                commentSummary1Dict[entitiesList][0].append(comment["text"])
-                commentSummary1Dict[entitiesList][1] += 1
+        if entitiesList not in commentSummary1Dict:
+            # list that tracks similar comments
+            comments = []
+            comments.append(comment["text"])
+            commentSummary1Dict[entitiesList] = [comments,1]
+        else:
+            commentSummary1Dict[entitiesList][0].append(comment["text"])
+            commentSummary1Dict[entitiesList][1] += 1
 
         # comment summary method 2 - a bit better
         theComment = comment["text"].lower()
-        print('Got to pre-nltk')
         try:
             tokens = nltk.word_tokenize(theComment)
             tagged = nltk.pos_tag(tokens)
         except Exception as error:
-            print(error)
             tagged = []
 
         wordList = []
