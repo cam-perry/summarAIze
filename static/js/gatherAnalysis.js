@@ -18,7 +18,7 @@ function displayComments(commentSummary) {
   revCommentSummary = commentSummary.reverse();
   let insert = '';
   insert += '<ul class="list-group">'
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < Math.min(5, revCommentSummary.length); i++) {
     let summary = revCommentSummary[i];
     let comments = summary[0];
     let randComment = comments[Math.floor(Math.random() * comments.length)]
