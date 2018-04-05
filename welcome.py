@@ -16,6 +16,9 @@ def Welcome():
 def Analysis():
     return app.send_static_file('analyze.html')
 
+@app.route('/about')
+def About():
+    return app.send_static_file('about.html')
 
 @app.route('/api/channel')
 def getVideos():
