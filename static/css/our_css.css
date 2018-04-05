@@ -218,3 +218,7 @@ table {
   .label {
     text-transform: capitalize;
   }
+
+  #aboutUs {
+    margin-top:200px;
+  }
