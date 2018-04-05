@@ -31,7 +31,6 @@ $('#channel-submit-btn').on('click', () => {
                 '<img class="card-img-top" src="' + video.snippet.thumbnails.high.url + '" alt="Card image cap">' +
                 '<div class="card-body">' +
                   '<h5 class="card-title"><a target="_blank" href="https://youtube.com/watch/?v=' + videoId + '">' + video.snippet.title + '</a></h5>' +
-                  '<p class="card-text">' + video.snippet.description + '</p>' +
                   '<a href="#" class="btn btn-danger video-selector" id="' + videoId + '">summarAIze</a>' +
                 '</div>' +
               '</div>'
